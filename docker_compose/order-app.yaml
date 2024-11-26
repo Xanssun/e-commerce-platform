@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  order-app:
+    build:
+      context: ../app/order-service
+      dockerfile: Dockerfile
+    container_name: order-app
+    ports: 
+      - "${API_PORT}:8000"
+    command: "uvicorn --factory application.api.main:create_app --reload --host 0.0.0.0 --port 8000"
+    env_file:
+      - ../app/order-service/.env
+    volumes:
+      - ../app/order-service/app:/app
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
